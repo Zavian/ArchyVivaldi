@@ -1,0 +1,853 @@
+/* Want to edit the UI? */
+/* Go to vivaldi:inspect/#apps */
+
+
+/* ==========================================================================
+   ROOT VARIABLES
+   ========================================================================== */
+/* Define custom properties (variables) for reuse throughout the stylesheet */
+:root {
+	/* Default scrollbar thumb color (initially transparent, shown on hover) */
+	--thumb: transparent; /* Note: Original had ----thumb, likely a typo, corrected to --thumb */
+
+	/* Width of the left tab bar */
+	--leftbarwidth: 267px;
+	/* adjust this for your best view */
+
+	/* Border spacing around the main browser content area */
+	--browserborder: 12px;
+	/* change this if you want to change border size */
+
+	/* Height for pinned tabs */
+	--PinnedTab: 45px;
+	/* pinned tabs height */
+
+	/* Height for normal (non-pinned) tabs */
+	--biggertab: 40px;
+	/* normal tabs height */
+
+	/* Example gradient - can be used for backgrounds or elements */
+	--lightgradient: linear-gradient(#c9cee1, #eeb7ca);
+	/* ^^^ Adjust as you want ^^^ */
+
+	/* Calculated width for pinned tabs area (full width minus borders) */
+	--PinnedWidth: calc(var(--leftbarwidth) - var(--browserborder) - var(--browserborder));
+
+}
+
+/* ==========================================================================
+   GLOBAL STYLES & TWEAKS
+   ========================================================================== */
+
+/* Hide default Vivaldi tooltips if they interfere or are unwanted */
+#vivaldi-tooltip {
+	display: none;
+}
+
+/* --- Tab Appearance Fixes --- */
+
+/* Prevent unwanted filter inversion on favicons in active tabs with transparent tab bars or dark themes */
+.transparent-tabbar .tab.active .tab-header .favicon:not(.svg),
+.theme-dark .tab.active .tab-header .favicon:not(.svg),
+.acc-dark.color-behind-tabs-off .tab.active .tab-header .favicon:not(.svg) {
+	filter: none !important; /* Override default Vivaldi filter */
+}
+
+/* Remove default indicator background for unread tabs */
+.tab.unread {
+	background-image: none !important;
+}
+
+/* Hide notification badges on tab headers (e.g., download progress) */
+.tab-header .button-badge {
+	display: none;
+}
+
+/* ==========================================================================
+   MAIN BROWSER WINDOW STYLES (Excluding Popups & Settings)
+   ========================================================================== */
+/* Apply the following styles only to the main browser window (#app),
+   ensuring it's not a popup or the settings page, identified by #browser */
+#app:has(#browser:not(.popup):not(.is-settingspage)) {
+
+	/* --------------------------------------------------------------------------
+	 * Top Bar / Main Bar / Address Bar Area
+	 * -------------------------------------------------------------------------- */
+
+	/* --- General Main Bar Styles --- */
+	.mainbar {
+		/* Adjust vertical padding within the main toolbar */
+		padding-block: 0.45em;
+		/* Set background color to match the tab bar */
+		background-color: var(--colorTabBar);
+		/* Remove default bottom border */
+		border-bottom: unset !important;
+	}
+
+	/* Increase padding on the right of the top toolbar when window buttons are present
+	   to prevent overlap, specifically when the address bar is at the top */
+	#browser.win.address-top .toolbar:has(.window-buttongroup.on-mainbar) {
+		padding-right: calc(46px * 3); /* Space for 3 window buttons */
+	}
+
+	/* Adjust main toolbar height for non-fullscreen Windows */
+	.win:not(.fullscreen) .toolbar-mainbar {
+		min-height: calc(34px / var(--uiZoomLevel)) !important; /* Adjust for UI zoom */
+
+		/* Ensure window buttons fit within the adjusted height */
+		.window-buttongroup {
+			height: 34px !important;
+			min-height: calc(34px * var(--uiZoomLevel)); /* Adjust for UI zoom */
+
+			button {
+				min-height: 100%; /* Make buttons fill the group height */
+			}
+		}
+	}
+
+	/* Adjust main toolbar height for non-fullscreen macOS */
+	.mac:not(.fullscreen) .toolbar-mainbar {
+		min-height: calc(34px / var(--uiZoomLevel)) !important; /* Adjust for UI zoom */
+	}
+
+	/* --- Vivaldi Menu Button --- */
+	button.vivaldi {
+		/* Set fixed width for the Vivaldi button */
+		width: 34px !important;
+		/* Position Vivaldi button with margin */
+		margin: 0 0 0 var(--browserborder) !important;
+		/* Remove default padding */
+		padding: 0 !important;
+	}
+
+	/* Hide the dropdown arrow on the Vivaldi button */
+	button.vivaldi span.expand-arrow {
+		display: none;
+	}
+
+	/* --- Address Field Styling --- */
+	/* Style the URL bar when it's not focused to show only the text */
+	.UrlBar-AddressField.button-textonly:not(:focus-within) {
+		/* Adjust max-width if needed */
+		/* max-width: max-content; */
+		background-color: var(--colorFgAlpha); /* Subtle background */
+		/* Optional: Remove border */
+		/* border: none; */
+
+		/* Ensure URL fragments are visible when the field is empty or edited */
+		.UrlField--IsEmpty .UrlFragment-Wrapper,
+		.UrlField--HasEditText .UrlFragment-Wrapper {
+			opacity: 1;
+		}
+
+		/* Style the wrapper for the URL fragments */
+		.UrlFragment-Wrapper {
+			min-width: fit-content; /* Adjust width to content */
+			position: relative; /* Needed for absolute positioning of input */
+		}
+
+		/* Hide the actual input field visually but keep it accessible */
+		input#urlFieldInput {
+			opacity: 0;
+			position: absolute; /* Take out of layout flow */
+		}
+
+		/* Style the field on hover */
+		.UrlField:hover {
+			input#urlFieldInput {
+				cursor: pointer; /* Indicate clickability */
+			}
+
+			background-color: rgba(230, 234, 241, 0.25); /* Subtle hover background */
+			border-radius: var(--radiusHalf); /* Rounded corners on hover */
+		}
+	}
+
+	/* Center the text within the URL field */
+	.UrlField {
+		justify-content: center;
+	}
+
+	/* Center the text alignment within the actual input */
+	input#urlFieldInput {
+		text-align: center;
+	}
+
+	/* Ensure the URL obfuscation warning doesn't interfere with window dragging */
+	.UrlBar-UrlObfuscationWarning {
+		-webkit-app-region: no-drag !important;
+	}
+
+	/* Remove background from the bookmark button when it's active (page is bookmarked) */
+	.BookmarkButton--Active {
+		background: transparent;
+	}
+
+	/* --- Address Bar on Bottom Specific Configuration --- */
+	/* Styles applied only when the address bar is positioned at the bottom */
+	#browser.win.address-bottom {
+		/* Move the header (containing tabs) below the main content */
+		#header {
+			order: 1; /* Change display order */
+			/* Effectively hide the original header space */
+			max-height: 0px;
+			min-height: 0px;
+		}
+
+		/* Adjust main bar padding when at the bottom */
+		.mainbar {
+			/* Account for Vivaldi menu button width */
+			/* padding-left: var(--menuWidth); /* Commented out - var(--menuWidth) not defined here */
+			padding-left: 34px; /* Assuming default Vivaldi button width */
+			/* Account for window control buttons */
+			padding-right: calc(46px * 3);
+			/* Remove top border that might appear */
+			border-top-width: 0px !important;
+		}
+
+		/* Reposition and resize window control buttons */
+		.window-buttongroup {
+			top: -34px; /* Move above the mainbar */
+			position: relative; /* Needed for 'top' */
+			/* Force specific height */
+			min-height: 34px !important;
+			max-height: 34px !important;
+			height: 34px !important;
+			scale: 1 !important; /* Ensure no scaling issues */
+		}
+
+		/* Ensure buttons within the group have correct height */
+		.window-buttongroup>button {
+			height: 34px !important;
+		}
+
+		/* Make flexible spacers draggable for window movement */
+		.button-toolbar.toolbar-spacer-flexible>button,
+		.button-toolbar.toolbar-spacer>button {
+			-webkit-app-region: drag;
+		}
+
+		/* Reposition and resize the Vivaldi menu button */
+		button.vivaldi {
+			top: -34px; /* Move above the mainbar */
+			position: relative; /* Needed for 'top' */
+			height: 34px !important;
+			/* width: var(--menuWidth); /* Commented out - var(--menuWidth) not defined here */
+			width: 34px !important; /* Use fixed width */
+			scale: unset !important; /* Ensure no scaling issues */
+			margin: 0 !important; /* Override general Vivaldi button margin */
+		}
+
+		/* Add margin to the top of the web page content area */
+		:not(.fullscreen) #webpage-stack {
+			margin-top: var(--browserborder);
+			margin-bottom: unset !important; /* Remove any default bottom margin */
+		}
+
+		/* Reposition the bookmark bar */
+		.bookmark-bar {
+			bottom: 34px !important; /* Position above the mainbar */
+		}
+
+		/* Reposition the trash button */
+		.toggle-trash {
+			bottom: 34px !important; /* Position above the mainbar */
+		}
+
+		/* Add margin to the top of the tab bar container */
+		.inner>.tabbar-wrapper {
+			margin-top: var(--browserborder);
+		}
+
+		/* ===== .switcher INTERACTION COMMENTED OUT ===== */
+		/* These rules adjusted spacing based on whether the panel switcher was visible */
+		/*
+		:has(.switcher) .mainbar>.toolbar.toolbar-visible>div:nth-child(3)[class="button-toolbar toolbar-spacer"],
+		:has(.switcher) .mainbar>.toolbar.toolbar-visible>div:nth-child(3)[class="button-toolbar toolbar-spacer button-disabled-preview"] {
+			max-width: 0px; // Collapse spacer when switcher is open
+		}
+		*/
+
+		/* ===== .switcher INTERACTION COMMENTED OUT ===== */
+		/*
+		:not(:has(.switcher)) .mainbar>.toolbar.toolbar-visible>div:nth-child(3)[class="button-toolbar toolbar-spacer"],
+		:not(:has(.switcher)) .mainbar>.toolbar.toolbar-visible>div:nth-child(3)[class="button-toolbar toolbar-spacer button-disabled-preview"] {
+			min-width: calc(var(--leftbarwidth) - 34px - 34px - 34px - var(--browserborder)); // Expand spacer when switcher is closed
+		}
+		*/
+	} /* End of Address Bar on Bottom Styles */
+
+	/* --------------------------------------------------------------------------
+	 * Left Tab Bar
+	 * -------------------------------------------------------------------------- */
+
+	/* --- Container and Wrapper --- */
+	#tabs-container {
+		/* Set fixed width for the entire tab container area */
+		min-width: var(--leftbarwidth);
+		max-width: var(--leftbarwidth);
+		/* Add padding around the tab container */
+		padding: var(--browserborder) var(--browserborder) 0 var(--browserborder);
+	}
+
+	/* Style the inner wrapper holding the actual tab bar */
+	.tabbar-wrapper>.tabbar-wrapper {
+		/* Rounded corners on the right side */
+		border-top-right-radius: var(--radiusHalf);
+		border-bottom-right-radius: var(--radiusHalf);
+		/* Ensure it fills the container width */
+		min-width: var(--leftbarwidth);
+		max-width: var(--leftbarwidth);
+		/* Adjust height to fill available space, accounting for border */
+		height: calc(100% - var(--browserborder) + 1px) !important;
+		/* Hide overflowing content (like scrollbars until needed) */
+		overflow: hidden;
+		/* Ensure tab bar is above other elements if needed */
+		z-index: 1;
+	}
+
+	/* Ensure separators and yield spaces are above other tab elements */
+	#tabs-container>.resize>.tab-strip>.separator,
+	#tabs-container>.resize>.tab-strip .tab-yield-space {
+		z-index: 1;
+	}
+
+	/* Set the width of the immediate tab bar container */
+	#tabs-tabbar-container {
+		width: var(--leftbarwidth) !important;
+		padding: 0 !important; /* Remove default padding */
+	}
+
+	/* Hide default tab bar buttons (e.g., scroll arrows if not using custom scrollbar) */
+	#tabs-tabbar-container>button,
+	#tabs-container>button {
+		display: none;
+	}
+
+	/* --- Tab Layout (Grid) --- */
+	/* Use CSS Grid for flexible tab layout */
+	.resize {
+		display: grid !important; /* Override default flex */
+		/* Adjust height to fill space minus bottom bar elements */
+		height: calc(100% - 28px);
+		flex: unset !important; /* Disable flex behavior */
+		grid-auto-rows: max-content; /* Rows size to content */
+		gap: 0.5em; /* Space between grid items (tabs) */
+		/* Define 3 columns for pinned tabs, auto-sizing */
+		grid-template-columns: repeat(3, minmax(var(--biggertab), auto)) !important;
+
+		/* Make tab strip and trash container part of the grid flow */
+		.tab-strip,
+		.sync-and-trash-container {
+			display: contents;
+		}
+
+		/* Reset transform/positioning for grid items */
+		.tab-position,
+		.newtab,
+		.separator {
+			transform: unset !important;
+			position: relative;
+		}
+
+		/* Style for pinned tabs within the grid */
+		.tab-position.is-pinned {
+			grid-column: span 1; /* Each pinned tab takes one column */
+			min-width: 100%;
+			max-width: 100%;
+			height: var(--PinnedTab); /* Fixed height */
+
+			/* Center content within pinned tabs */
+			.tab-header {
+				justify-content: center;
+				padding: unset; /* Remove padding */
+				flex-basis: var(--PinnedTab) !important; /* Use full height */
+
+				/* Hide title text in pinned tabs */
+				.title {
+					display: none;
+				}
+			}
+		}
+
+		/* Style for normal (non-pinned) tabs, new tab button, and separators */
+		.tab-position:not(.is-pinned),
+		.newtab,
+		.separator {
+			grid-column: 1 / -1; /* Span all columns */
+			min-width: 100%; /* Full width */
+		}
+
+		/* Ensure tab wrappers don't have unintended max-height or margin */
+		.tab-wrapper {
+			max-height: unset !important;
+			margin: 0 !important;
+		}
+	}
+
+	/* --- Pinned Tab Appearance --- */
+	.tab-position.is-pinned .tab {
+		/* Semi-transparent background using accent color */
+		background-color: rgba( from var(--colorAccentBg) r g b / 50%);
+		max-height: var(--PinnedTab); /* Fixed height */
+		border: 2px solid var(--colorAccentBorderDark); /* Border */
+
+		/* Full accent color on hover */
+		&:hover {
+			background-color: rgba( from var(--colorAccentBg) r g b / 100%);
+		}
+
+		/* Style for active pinned tab */
+		&.active {
+			background-color: var(--colorAccentBg); /* Solid accent background */
+			/* outline: 2px solid white */ /* Optional outline */
+			border-color: var(--colorFg); /* Use foreground color for border */
+		}
+	}
+
+	/* --- Normal Tab Appearance & Height ("Bigger Tab") --- */
+	#tabs-container .tab-position:not(.accordion-toggle-arrow):not(.is-pinned) {
+		height: var(--biggertab) !important; /* Set height */
+
+		.tab {
+			max-height: var(--biggertab) !important; /* Ensure inner tab matches height */
+		}
+	}
+
+	/* Adjust header flex-basis for normal tabs */
+	.tab-position:not(.is-pinned) .tab .tab-header {
+		flex-basis: var(--biggertab) !important;
+	}
+
+	/* Ensure favicon has minimum width in normal tabs */
+	.tab-position:not(.is-pinned) .tab .tab-header>.favicon {
+		min-width: 26px !important;
+	}
+
+	/* Remove padding around the title in normal tabs */
+	.tab-position:not(.is-pinned) .tab .tab-header>.title {
+		padding: 0;
+	}
+
+	/* Set general font size for all tabs */
+	.tab-position .tab {
+		font-size: 14px;
+	}
+
+	/* Ensure tab titles use the foreground color */
+	.tab-position span.title {
+		color: var(--colorFg);
+	}
+
+	/* --- Tab Quality of Life (QOL) Tweaks --- */
+	/* Adjust layout within normal (non-pinned) tabs */
+	.tab-position:not(.is-pinned) {
+		/* Style and position the audio indicator */
+		.tab-audio {
+			position: relative !important; /* Override absolute positioning */
+			top: 0 !important; /* Reset vertical position */
+			order: 0; /* Place it before favicon/title */
+			margin-left: 0px;
+			margin-right: 6px; /* Space after audio icon */
+			color: var(--colorFg); /* Match foreground color */
+			width: 18px;
+			height: 18px;
+		}
+
+		/* Ensure title and close button are positioned correctly */
+		.title {
+			position: relative !important;
+			order: 1; /* Place after audio icon/favicon */
+		}
+
+		.close {
+			position: relative !important;
+			order: 1; /* Place alongside title (end) */
+		}
+
+		/* Reset any transforms on the favicon */
+		.favicon {
+			transform: unset !important;
+		}
+	}
+
+	/* Reset vertical position for audio indicator in pinned tabs */
+	.tab-position.is-pinned .tab-audio {
+		top: 0 !important;
+	}
+
+	/* --- Tab Order --- */
+	/* Place normal tabs after pinned tabs/toolbar items */
+	.tab-position:not(.toolbar):not(.is-pinned):not(.tab-yield-space) {
+		order: 1; /* Grid order */
+	}
+
+	/* Ensure toolbar items (like workspace button) appear first */
+	.toolbar.toolbar-tabbar.toolbar-large.tab-position {
+		order: 0; /* Grid order */
+	}
+
+	/* --- New Tab Button & Separator --- */
+	/* Remove margin from the sync/trash container */
+	.sync-and-trash-container {
+		margin: 0 !important;
+	}
+
+	/* Style the 'New Tab' button */
+	.newtab {
+		left: unset !important; /* Reset position */
+		top: unset !important; /* Reset position */
+		height: var(--biggertab); /* Match normal tab height */
+
+		button {
+			height: var(--biggertab); /* Match height */
+		}
+
+		/* Add text label to the new tab button */
+		button:after {
+			content: "New Tab";
+			color: var(--colorFg);
+			width: 100%;
+			font-size: 14px;
+			display: block; /* Ensure it appears correctly */
+			text-align: left; /* Center the text */
+		}
+	}
+
+	/* --- Trash and Synced Tabs Buttons --- */
+	/* Position the trash button at the bottom-left */
+	.button-toolbar.toggle-trash {
+		position: fixed; /* Position relative to viewport */
+		left: var(--browserborder);
+		bottom: var(--browserborder);
+		z-index: 2; /* Ensure it's above tab bar */
+
+		button {
+			min-height: 28px !important; /* Set minimum height */
+		}
+	}
+
+	/* Position the synced tabs button next to the trash */
+	.button-toolbar.synced-tabs-button {
+		position: fixed; /* Position relative to viewport */
+		left: calc(var(--browserborder) + 28px); /* Offset by trash button width */
+		bottom: var(--browserborder);
+		z-index: 2; /* Ensure it's above tab bar */
+
+		button {
+			min-height: 28px !important; /* Set minimum height */
+		}
+	}
+
+	/* --- Workspaces Button --- */
+	/* Hide the default separator next to the workspace button */
+	.separator-wsbutton {
+		display: none;
+	}
+
+	/* Style and position the workspace button */
+	.tabbar-workspace-button {
+		position: absolute; /* Position within the tab bar container */
+		padding: 0 6px; /* Horizontal padding */
+		right: var(--browserborder); /* Align to the right edge */
+		bottom: 1px; /* Align near the bottom */
+		width: 32px !important; /* Fixed width */
+		height: 28px !important; /* Fixed height */
+		z-index: 5; /* Ensure it's above other elements */
+		background-color: transparent !important; /* No background */
+		justify-content: center; /* Center the icon */
+		box-shadow: unset !important; /* Remove default shadow */
+
+		/* Ensure the inner button fits and has no margin */
+		button.ToolbarButton-Button[title="Workspaces"] {
+			min-width: 32px;
+			margin: 0px !important;
+		}
+	}
+
+	/* Remove hover background effect */
+	.button-toolbar.workspace-popup.tabbar-workspace-button button:hover {
+		background-color: transparent !important;
+	}
+
+	/* Hide text title and menu indicator for icon-only look */
+	.tabbar-workspace-button>button>.button-title,
+	.tabbar-workspace-button>button>.button-toolbar-menu-indicator {
+		display: none;
+	}
+
+	/* Adjust workspace popup position */
+	#browser:has(.WorkspacePopup) {
+		/* Position the popup menu */
+		.ToolbarButtonPopup-DefaultStyles {
+			top: unset !important; /* Remove default top */
+			/* Position relative to the bottom bar elements */
+			bottom: calc(var(--browserborder) + 34px) !important;
+		}
+
+		/* Adjust the popup arrow */
+		.button-popup-pos-below:before {
+			top: unset; /* Remove default top */
+			bottom: -12px; /* Position below the popup */
+			transform: rotate(180deg); /* Point upwards */
+		}
+	}
+
+	/* --- Bookmarks Bar (in Tab Bar Area) --- */
+	/* Position and size the bookmark bar, adjusting based on synced tabs button visibility */
+	#main:has(.synced-tabs-button) .bookmark-bar {
+		left: calc(var(--browserborder) + 64px); /* Position after trash + sync */
+		width: calc(var(--leftbarwidth) - var(--browserborder) - var(--browserborder) - 96px); /* Calculate width */
+	}
+
+	#main:not(:has(.synced-tabs-button)) .bookmark-bar {
+		left: calc(var(--browserborder) + 32px); /* Position after trash only */
+		width: calc(var(--leftbarwidth) - var(--browserborder) - var(--browserborder) - 64px); /* Calculate width */
+	}
+
+	/* General bookmark bar styling */
+	.bookmark-bar {
+		position: absolute; /* Position within the tab bar area */
+		height: 28px !important; /* Fixed height */
+		overflow: hidden; /* Hide overflow */
+		z-index: 3; /* Ensure it's above tabs but below buttons */
+		background: transparent !important; /* No background */
+		border: 0 !important; /* No border */
+		bottom: var(--browserborder); /* Align to bottom */
+
+		/* Center items within the observer container */
+		.observer {
+			padding: 0;
+			justify-content: center;
+		}
+
+		/* Style individual bookmark buttons */
+		button {
+			padding: 0 3px; /* Minimal padding */
+			gap: 0; /* No gap */
+			visibility: visible; /* Ensure visible */
+		}
+
+		/* Remove background from bookmark items */
+		.bookmarkbarItem {
+			background-color: transparent !important;
+		}
+	}
+
+	/* --- Scrollbar for Tabs Container --- */
+	/* Style the scrollbar within the tabs container */
+	div#tabs-container {
+		/* Width of the scrollbar */
+		::-webkit-scrollbar {
+			border-radius: 50%; /* Rounded ends */
+			width: 2px; /* Thin scrollbar */
+		}
+
+		/* Style the track (the background) */
+		::-webkit-scrollbar-track {
+			background: transparent; /* Invisible track */
+		}
+
+		/* Style the handle (the draggable part) */
+		::-webkit-scrollbar-thumb {
+			background: var(--thumb); /* Use variable for color (set on hover) */
+		}
+
+		/* Hide the scrollbar buttons (arrows) */
+		::-webkit-scrollbar-button {
+			height: 0;
+			width: 0;
+		}
+	}
+
+	/* Show scrollbar thumb only when hovering over the tab container */
+	#tabs-tabbar-container:has(*:hover) {
+		--thumb: rgba(from var(--colorFg) r g b / 15%); /* Semi-transparent foreground color */
+	}
+
+	#browser .tab {
+		border: 2px solid transparent; /* Transparent border for all tabs */
+	}
+
+	/* --- Active Tab Styling --- */
+	/* Apply a gradient background to the active tab */
+	#browser .tab.active {
+		background: linear-gradient(345deg, var(--colorAccentBg), transparent);
+		border-color: var(--colorAccentBorder);
+	}
+
+	/* Style for an empty tab bar wrapper (if needed, e.g., for spacing) */
+	.tabbar-wrapper:empty {
+		display: block;
+		width: var(--browserborder); /* Use border width for spacing */
+	}
+
+
+	/* --------------------------------------------------------------------------
+	 * Web Page Content Area
+	 * -------------------------------------------------------------------------- */
+	/* Add shadow and rounded corners to the main web content area */
+	#webpage-stack {
+		box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);
+	}
+
+	/* Apply "Curved Frame" effect (more specific styling) */
+	#browser:not(.fullscreen) #webpage-stack {
+		/* Use the same shadow for consistency */
+		box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);
+		/* Alternative shadow style: */
+		/* box-shadow: 0 0 0 calc(var(--browserborder) * 2) var(--colorTabBar); */
+		border-radius: var(--radiusHalf); /* Rounded corners */
+		/* Add margins to create the border effect */
+		margin-bottom: var(--browserborder);
+		margin-right: var(--browserborder);
+		/* margin-left is handled by tab bar or potentially switcher interaction */
+	}
+
+	/* --------------------------------------------------------------------------
+	 * Bottom Bar / Status Bar
+	 * -------------------------------------------------------------------------- */
+	/* Adjust the position and padding of the status info overlay */
+	.StatusInfo {
+		bottom: var(--browserborder) !important; /* Align with bottom border */
+		/* Add padding to avoid overlap with the left tab bar */
+		padding-left: var(--leftbarwidth) !important;
+		z-index: 10; /* Ensure it's above webpage content */
+
+		/* Add rounded corners to the status info content */
+		.StatusInfo-Content {
+			border-radius: var(--radiusHalf) !important;
+		}
+	}
+
+	/* --------------------------------------------------------------------------
+	 * Right Bar / Panels
+	 * -------------------------------------------------------------------------- */
+	/* Hide the panels container completely */
+	#panels-container {
+		display: none;
+	}
+
+	/* --------------------------------------------------------------------------
+	 * Color / Theme Fixes
+	 * -------------------------------------------------------------------------- */
+	/* Ensure button icons use the correct foreground color */
+	span.button-icon {
+		color: var(--colorFg);
+	}
+
+	/* Remove background when transparent tab bar setting is active */
+	#browser.transparent-tabbar #tabs-tabbar-container {
+		background-color: unset !important;
+	}
+
+	/* ==========================================================================
+	   COMMENTED OUT: .switcher INTERACTIONS (Floating Tabs / Panel Toggle)
+	   ========================================================================== */
+	/* These sections were originally commented out in the provided code.
+	   They implement behavior where the left tab bar/bookmarks hide when
+	   the panel switcher is visible and reappear on hover or interaction. */
+
+	/* --- General Switcher Spacing (Top Bar) --- */
+	/*
+	#browser:has(.switcher):not(.toolbar-edit-mode) .toolbar-mainbar .toolbar-spacer:has(+ .button-toolbar button[name="Back"]) {
+		max-width: 0; // Collapse spacer near back button when switcher is open
+	}
+	*/
+
+	/*
+	#browser.win:not(:has(.switcher)):not(.toolbar-edit-mode) .toolbar-mainbar .toolbar-spacer:has(+ .button-toolbar button[name="Back"]) {
+		min-width: calc(var(--leftbarwidth) - 34px - 34px - 34px - var(--browserborder)); // Expand spacer when switcher closed
+	}
+	*/
+
+	/* --- Tab Bar Shadow (Conditional) --- */
+	/*
+	#browser:not(:has(#panels-container.switcher)) .tabbar-wrapper>.tabbar-wrapper {
+		// Add shadow effect extending from tab bar when switcher is NOT active
+		box-shadow: var(--colorTabBar) 0 calc(var(--leftbarwidth) * 1.5);
+	}
+	*/
+
+	/* --- Web Page Margin (Conditional) --- */
+	/*
+	#browser:not(.fullscreen):has(#panels-container.switcher) #webpage-stack {
+		// Adjust left margin when switcher is active
+		margin-left: calc(var(--browserborder) - var(--leftbarwidth));
+	}
+	*/
+
+	/* --- Floating Tab Bar Effect --- */
+	/*
+	#browser:has(.switcher):not(.toolbar-edit-mode) {
+
+		// Define transitions for elements that will move/fade
+		.tabbar-wrapper>.tabbar-wrapper,
+		.bookmark-bar,
+		.tabbar-workspace-button {
+			transition-duration: 200ms !important;
+			transition-property: left, right, opacity !important;
+			transition-delay: 200ms !important; // Delay hiding
+		}
+
+		// Move tab bar off-screen and fade out
+		.tabbar-wrapper>.tabbar-wrapper {
+			left: calc(var(--browserborder) - var(--leftbarwidth));
+			z-index: 1; // Keep consistent z-index
+			opacity: 0;
+		}
+
+		// Move bookmark bar off-screen and fade out (if not highlighted)
+		.bookmark-bar:has(.bookmarkbarItem:not(.highlighted)) {
+			left: calc(var(--browserborder) + 32px - var(--leftbarwidth));
+			opacity: 0;
+		}
+
+		// Fade out workspace button
+		.tabbar-workspace-button {
+			opacity: 0;
+		}
+	}
+	*/
+
+	/* --- Reappear on Hover/Interaction --- */
+	/*
+	#browser:has(.switcher) {
+
+		// Conditions for reappearance: Hovering tab bar, bookmark bar, status bar,
+		// workspace popup open, bookmark item highlighted, download popout open
+		&:has(.bookmark-bar:hover),
+		&:has(.tabbar-wrapper > .tabbar-wrapper:hover),
+		&:has(.WorkspacePopup),
+		&:has(.bookmarkbarItem.highlighted),
+		&:has(.toolbar-statusbar:hover),
+		&:has(.download-popout) {
+
+			// Bring tab bar back into view
+			.tabbar-wrapper>.tabbar-wrapper {
+				left: 0 !important;
+				opacity: 1 !important;
+				transition-delay: 0ms !important; // Show immediately
+			}
+
+			// Bring bookmark bar back into view
+			.bookmark-bar {
+				// Recalculate left based on standard positioning
+				left: calc(var(--browserborder) + 32px); // Adjust if :has(.synced-tabs-button) is needed
+				opacity: 1 !important;
+				transition-delay: 0ms !important; // Show immediately
+			}
+
+			// Bring workspace button back into view
+			.tabbar-workspace-button {
+				opacity: 1 !important;
+				transition-delay: 0ms !important; // Show immediately
+			}
+		}
+	}
+	*/
+	/* ==========================================================================
+	   END OF COMMENTED OUT .switcher INTERACTIONS
+	   ========================================================================== */
+
+} /* End of #app:has(#browser:not(.popup):not(.is-settingspage)) */
