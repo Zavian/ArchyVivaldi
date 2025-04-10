@@ -11,7 +11,7 @@
 	--thumb: transparent; /* Note: Original had ----thumb, likely a typo, corrected to --thumb */
 
 	/* Width of the left tab bar */
-	--leftbarwidth: 267px;
+	--leftbarwidth: 262px;
 	/* adjust this for your best view */
 
 	/* Border spacing around the main browser content area */
@@ -26,12 +26,11 @@
 	--biggertab: 40px;
 	/* normal tabs height */
 
-	/* Example gradient - can be used for backgrounds or elements */
-	--lightgradient: linear-gradient(#c9cee1, #eeb7ca);
-	/* ^^^ Adjust as you want ^^^ */
-
 	/* Calculated width for pinned tabs area (full width minus borders) */
 	--PinnedWidth: calc(var(--leftbarwidth) - var(--browserborder) - var(--browserborder));
+
+	/* Default: 2px */
+	--TabBorderSize: 2px;
 
 }
 
@@ -666,7 +665,7 @@
 	}
 
 	#browser .tab {
-		border: 2px solid transparent; /* Transparent border for all tabs */
+		border: var(--TabBorderSize) solid transparent; /* Transparent border for all tabs */
 	}
 
 	/* --- Active Tab Styling --- */
