@@ -1,4 +1,4 @@
-![image](https://raw.githubusercontent.com/ImMainTheme/ArchyVivaldi/main/src/archy_preview.png)
+![image](https://raw.githubusercontent.com/Zavian/ArchyVivaldi/main/src/archy_preview.png)
 
 
 ## Features: 
