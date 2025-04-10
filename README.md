@@ -1,47 +1,91 @@
+# ArchyVivaldi 🎨
+
+
 ![image](https://raw.githubusercontent.com/Zavian/ArchyVivaldi/main/src/archy_preview.png)
 
+> Edited version of ArchyVivaldi - A CSS theme for the Vivaldi browser.
 
-## Features: 
-| Feature | Preview |
-| - | - |
-| | |
+This repository contains a customized CSS theme designed to enhance the visual experience of the Vivaldi browser.
 
-<details>
-<summary>Settings need to change before applying css:</summary>
+## 🚀 Installation
 
-PS: Panel is not working on this project right now!!
-1. Toolbar Edit (right click on any toolbar -> Customize Toolbar)
+### Prerequisites
 
-| Category | Options |
-| --- | --- |
-| Address Bar |Put the following item in sequence:<br><code>Panel Toggle // Download // Space // Back // Forward // Reload // Flexible Space // AddressField // Flexible Space // Page Tiling // Extensions</code>|
-| Status Bar |Put status info only|
+1.  Vivaldi browser installed.
+2.  Enable CSS modifications in Vivaldi: Go to `vivaldi://experiments/` and enable "Allow CSS modifications".
 
-2. Vivaldi settings (Gear icon)
+### Steps
 
-| Settings | Options |
-| --- | --- |
-| Appearance |1. Status Bar: Status Info Overlay"|
-| Tabs |1. Show Tab Bar<br>2. Left<br>3. Check "Show Separator Below Pinned Tabs"<br>4. Check "Enable Workspaces" and "Show Workspaces in Tab Bar"|
-| Panel |no settings needed if you use no panel version|
-| Address Bar |1. Top<br>2. Check "Hidden Extensions to drop-down menu"|
-| Bookmarks |1. Check "Show Bookmark Bar" |
-| Appearance |1. Set custom ui modifications folder as you like|
+1.  **Locate Vivaldi's UI Modification Folder:**
+    *   Navigate to Vivaldi's settings (Gear icon).
+    *   Go to `Appearance` -> `Custom UI Modifications`.
+    *   The path displayed is where you'll place the theme files. If the folder doesn't exist, create it.
 
-3. Goto vivaldi://experiments/ and check Allow CSS modifications
+2.  **Download and Place Theme Files:**
+    *   Download `archy.css` and place it somewhere on your PC.
 
-When everything complete, your vivaldi should look like this
-![image](https://raw.githubusercontent.com/ImMainTheme/ArchyVivaldi/main/src/after_setting.png)
+3.  **Apply the CSS:**
+    *   Restart Vivaldi or click "Update" in the `Custom UI Modifications` settings.
+
+4.  **Select a Theme:**
+    *   Choose either `brightVivaltheme` or `darkbluetheme` from the available themes in Vivaldi's settings or install any theme from the Vivaldi Marketplace.
+
+5.  **Enable CSS Modifications:**
+    *   Go to `vivaldi://experiments/` and enable "Allow CSS modifications".
+
+8.  **Configure Vivaldi Settings:**
+    *   Follow the settings outlined below to ensure the theme displays correctly.
+
+## ✨ Key Features
+
+*   **Customizable Toolbar:** Adjust the address bar elements for a streamlined experience.
+*   **Status Bar Overlay:**  Status information is displayed as an overlay.
+*   **Tab Bar Placement:**  Tab bar is positioned to the left.
+*   **Theme Options:** Includes both light and dark themes.
+
+## ⚙️ Vivaldi Settings
+
+These settings are crucial for the theme to function as intended.
+
+1.  **Toolbar Editor:** 
+    *   Addressbar: Customize it however you want it, use plenty of extra spacers
+
+    *   Status Bar: Put status info only.
+
+2.  **Vivaldi Settings (Gear Icon):**
+
+    *   **Appearance:**
+        *   Status Bar: Status Info Overlay.
+    *   **Tabs:**
+        *   Show Tab Bar.
+        *   Left Tab Bar.
+        *   Check "Show Separator Below Pinned Tabs".
+        *   Check "Enable Workspaces" and "Show Workspaces in Tab Bar".
+    *   **Panel:**
+        *   No settings needed if you use no panel version.
+    *   **Address Bar:**
+        *   Top.
+        *   Check "Hidden Extensions to drop-down menu".
+    *   **Bookmarks:**
+        *   Uncheck "Show Bookmark Bar".
+    *   **Appearance:**
+        *   Set custom UI modifications folder to the one you downloaded `archy.css` to.
+
+3.  **Experiments:**
+
+    *   Go to `vivaldi://experiments/` and enable "Allow CSS modifications".
 
 
-Then you can download the arc.css and put it to your custom ui modifications folder.
-</details>
+When everything is done, your vivaldi should look like this
+![image](https://raw.githubusercontent.com/Zavian/ArchyVivaldi/main/src/after_setting.png)
 
-<details>
-<summary>How to install:</summary>
+## 🤝 Contributing
 
-1. download archy.css and put it in your custom ui modifications folder
-2. download brightVivaltheme.zip and darkbluetheme.zip, goto Vivaldi Settings -> open theme -> import those 2 zips
-3. Choose the theme between brightVivaltheme and darkbluetheme
+1.  Fork the repository.
+2.  Create a new branch for your feature or bug fix.
+3.  Make your changes and commit them with descriptive messages.
+4.  Submit a pull request.
 
-</details>
+## 📜 License
+
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
