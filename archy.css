@@ -411,6 +411,11 @@
 		.tab {
 			max-height: var(--biggertab) !important; /* Ensure inner tab matches height */
 		}
+
+		.svg-tab-selection {
+			height: var(--biggertab);
+			max-height: var(--biggertab) !important; 
+		}
 	}
 
 	/* Adjust header flex-basis for normal tabs */
