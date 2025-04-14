@@ -289,6 +289,11 @@
 		padding: var(--browserborder) var(--browserborder) 0 var(--browserborder);
 	}
 
+	.tabs-left .tabbar-wrapper,
+	.tabs-right .tabbar-wrapper {
+		background-color: unset !important;
+	}
+
 	/* Style the inner wrapper holding the actual tab bar */
 	.tabbar-wrapper>.tabbar-wrapper {
 		/* Rounded corners on the right side */
