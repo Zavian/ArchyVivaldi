@@ -685,7 +685,7 @@
 	}
 
 	/* Style for an empty tab bar wrapper (if needed, e.g., for spacing) */
-	.tabbar-wrapper:empty {
+	#browser:not(.fullscreen) .tabbar-wrapper:empty {
 		display: block;
 		width: var(--browserborder); /* Use border width for spacing */
 	}
